@@ -1,39 +1,47 @@
-plugins {
-    id 'org.springframework.boot' version '2.1.9.BUILD-SNAPSHOT'
-    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
-    id 'java'
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.1.6.RELEASE")
+    }
 }
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
 
 group = 'com.project'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '1.8'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
+ext {
+    set('vaadinVersion', "14.0.1")
+}
+
+dependencies {
+    compile("com.vaadin:vaadin-spring-boot-starter")
+//    compile("org.springframework.boot:spring-boot-starter-data-jpa")
+    compile('org.springframework.boot:spring-boot-starter-web')
+    compileOnly 'org.projectlombok:lombok:1.18.10'
+    annotationProcessor 'org.projectlombok:lombok:1.18.10'
+    compile group: 'com.vaadin', name: 'vaadin-server', version: '8.9.0'
+    compile('com.vaadin:vaadin-bom:14.0.5')
+    compile('com.fasterxml.jackson.datatype:jackson-datatype-jsr310')
+    testCompile("junit:junit")
+    testCompile("org.springframework.boot:spring-boot-starter-test")
 }
 
 repositories {
     mavenCentral()
-    maven { url 'https://repo.spring.io/milestone' }
-    maven { url 'https://repo.spring.io/snapshot' }
-}
-
-ext {
-    set('vaadinVersion', "14.0.6")
-}
-
-dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'com.vaadin:vaadin-spring-boot-starter'
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    maven { url "https://maven.vaadin.com/vaadin-addons" }
 }
 
 dependencyManagement {
     imports {
-        mavenBom "com.vaadin:vaadin-bom:${vaadinVersion}"
+        mavenBom 'com.vaadin:vaadin-bom:14.0.4'
     }
 }
