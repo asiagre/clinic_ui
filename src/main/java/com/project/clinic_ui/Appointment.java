@@ -14,12 +14,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Appointment {
 
+    private Long id;
     private Doctor doctor;
     private LocalDateTime slot;
-    private String firstname;
-    private String lastname;
-    private String pin;
-    private String phoneNumber;
-    private String email;
-
+//    private String firstname;
+//    private String lastname;
+//    private String pin;
+//    private String phoneNumber;
+//    private String email;
+    private Patient patient;
 }

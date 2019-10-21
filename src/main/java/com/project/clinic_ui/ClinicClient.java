@@ -10,6 +10,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.print.Doc;
 import java.net.URI;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -94,4 +95,38 @@ public class ClinicClient {
                 .build().encode().toUri();
         restTemplate.delete(url);
     }
+
+    public void addSlot(Slot slot) {
+        LocalDateTime slotDate = LocalDateTime.of(slot.getYear(), slot.getMonth(), slot.getDay(), slot.getHour(), slot.getMinute());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+        String date = slotDate.format(formatter);
+        URI url = UriComponentsBuilder.fromHttpUrl(clinicApiEndpoint + "/doctors/" + slot.getDoctor().getId() + "/slots")
+                .queryParam("slot", date)
+                .build().encode().toUri();
+        restTemplate.put(url, null);
+    }
+
+    public void addScore(Score score) {
+        URI url = UriComponentsBuilder.fromHttpUrl(clinicApiEndpoint + "/doctors/" + score.getDoctor().getId() + "/scores")
+                .queryParam("score", score.getScore())
+                .build().encode().toUri();
+        restTemplate.put(url, null);
+    }
+
+//    public List<AppointmentDto> getPatientAppointments(Patient patient) {
+//        URI url = UriComponentsBuilder.fromHttpUrl(clinicApiEndpoint + "/patients/" + patient.getId() + "/appointments")
+//                .build().encode().toUri();
+//        AppointmentDto[] response = restTemplate.getForObject(url, AppointmentDto[].class);
+//        if(response != null) {
+//            List<AppointmentDto> appointmentDtos = Arrays.asList(response);
+//            return appointmentDtos;
+//        }
+//    }
+//
+//    public void editAppointment(Appointment appointment, LocalDateTime slot) {
+//        URI url = UriComponentsBuilder.fromHttpUrl(clinicApiEndpoint + "/patients/" + appointment. + "/scores")
+//                .queryParam("score", score.getScore())
+//                .build().encode().toUri();
+//        restTemplate.put(url, null);
+//    }
 }

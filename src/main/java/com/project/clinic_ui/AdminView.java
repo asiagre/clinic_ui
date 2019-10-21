@@ -13,26 +13,24 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-//@Component
 @Route("admin")
 public class AdminView extends VerticalLayout {
-//
-//    @Autowired
-//    private MainView mainView;
 
-    //@Autowired
     private ClinicClient clinicClient;
     private DoctorForm doctorForm;
+    private SlotForm slotForm;
 
     private Grid<Doctor> doctorGrid = new Grid<>(Doctor.class);
     private ComboBox<String> specialization = new ComboBox<>();
     private TextField filter = new TextField();
     private Button search = new Button("Search");
     private Button addDoctor = new Button("Add doctor");
+    private Button addSlot = new Button("Add slot");
 
     public AdminView(ClinicClient clinicClient) {
         this.clinicClient = clinicClient;
         doctorForm = new DoctorForm(this, clinicClient);
+        slotForm = new SlotForm(this, clinicClient);
         filter.setPlaceholder("Filter by lastname");
         filter.setClearButtonVisible(true);
         filter.setValueChangeMode(ValueChangeMode.EAGER);
@@ -46,14 +44,18 @@ public class AdminView extends VerticalLayout {
             doctorGrid.asSingleSelect().clear();
             doctorForm.setDoctor(new Doctor());
         });
+        addSlot.addClickListener(event -> {
+            slotForm.setSlot(new Slot());
+        });
         doctorGrid.setColumns("firstname", "lastname", "specialization", "rating");
-        HorizontalLayout horizontalLayout = new HorizontalLayout(specialization, filter, search, addDoctor);
-        HorizontalLayout mainContent = new HorizontalLayout(doctorGrid, doctorForm);
+        HorizontalLayout horizontalLayout = new HorizontalLayout(specialization, filter, search, addDoctor, addSlot);
+        HorizontalLayout mainContent = new HorizontalLayout(doctorGrid, doctorForm, slotForm);
         mainContent.setSizeFull();
         doctorGrid.setSizeFull();
         add(horizontalLayout, mainContent);
         setSizeFull();
         doctorForm.setDoctor(null);
+        slotForm.setSlot(null);
         refresh();
         doctorGrid.asSingleSelect().addValueChangeListener(event -> doctorForm.setDoctor(doctorGrid.asSingleSelect().getValue()));
     }

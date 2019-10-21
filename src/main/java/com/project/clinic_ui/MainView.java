@@ -3,24 +3,15 @@ package com.project.clinic_ui;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.menubar.MenuBar;
+import com.vaadin.flow.component.login.AbstractLogin;
+import com.vaadin.flow.component.login.LoginForm;
+import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLayout;
-import com.vaadin.flow.spring.annotation.UIScope;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
-import javax.print.Doc;
-import java.util.ArrayList;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -28,22 +19,26 @@ import java.util.stream.Collectors;
 public class MainView extends VerticalLayout implements RouterLayout {
 
     private ClinicClient clinicClient;
-    private PatientForm patientForm;
+    private AppointmentForm appointmentForm;
     private AdminView adminView;
+    private ScoreForm scoreForm;
 
     private ComboBox<String> comboBox = new ComboBox<>();
     private TextField textField = new TextField();
     private Button button = new Button("Search");
     private Grid<Doctor> doctorGrid = new Grid<>(Doctor.class);
     private Button adminButton = new Button("Admin panel");
+    private Button addScore = new Button("Add score");
+    LoginForm component = new LoginForm();
 //    private MenuBar menuBar = new MenuBar();
 //    private Icon logo = new Icon(VaadinIcon.DOCTOR);
 //    private Icon search = new Icon(VaadinIcon.SEARCH);
 
     public MainView(ClinicClient clinicClient) {
         this.clinicClient = clinicClient;
-        patientForm = new PatientForm(this, clinicClient);
+        appointmentForm = new AppointmentForm(this, clinicClient);
         adminView = new AdminView(clinicClient);
+        scoreForm = new ScoreForm(this, clinicClient);
         comboBox.setItems(specializations());
         comboBox.addValueChangeListener(event ->
                 doctorGrid.setItems(clinicClient.getDoctorBySpecialization(event.getValue())));
@@ -51,26 +46,36 @@ public class MainView extends VerticalLayout implements RouterLayout {
         textField.setClearButtonVisible(true);
         textField.setValueChangeMode(ValueChangeMode.EAGER);
         textField.addValueChangeListener(e -> update());
-        HorizontalLayout horizontalLayout = new HorizontalLayout(comboBox, textField, button);
+        HorizontalLayout horizontalLayout = new HorizontalLayout(comboBox, textField, button, addScore);
         doctorGrid.setColumns("firstname", "lastname", "rating", "specialization");
-        HorizontalLayout mainContent = new HorizontalLayout(doctorGrid, patientForm);
+        HorizontalLayout mainContent = new HorizontalLayout(doctorGrid, appointmentForm, scoreForm, component);
         mainContent.setSizeFull();
         doctorGrid.setSizeFull();
         add(horizontalLayout, mainContent, adminButton);
-        patientForm.setAppointment(null, null);
-        adminButton.addClickListener(e -> {
-            button.getUI().ifPresent(ui -> ui.navigate("admin"));
+        appointmentForm.setAppointment(null, null);
+        scoreForm.setScore(null);
+        component.setVisible(false);
+        adminButton.addClickListener(event -> {
+            component.setVisible(true);
+            component.setI18n(createI18n());
+            component.addLoginListener(e -> {
+                boolean isAuthenticated = authenticate(e);
+                if (isAuthenticated) {
+                    button.getUI().ifPresent(ui -> ui.navigate("admin"));
+                } else {
+                    component.setError(true);
+                }
+            });
         });
         setSizeFull();
         refresh();
-//        makeAppointment.addClickListener(event -> {
-//            doctorGrid.asSingleSelect().clear();
-//            patientForm.setAppointment(new Appointment());
-//        });
         doctorGrid.asSingleSelect().addValueChangeListener(event -> {
             Doctor doctor = doctorGrid.asSingleSelect().getValue();
             doctorGrid.asSingleSelect().clear();
-            patientForm.setAppointment(new Appointment(), doctor);
+            appointmentForm.setAppointment(new Appointment(), doctor);
+        });
+        addScore.addClickListener(event -> {
+            scoreForm.setScore(new Score());
         });
 
 //        menuBar.addItem(logo);
@@ -94,6 +99,23 @@ public class MainView extends VerticalLayout implements RouterLayout {
         return clinicClient.getDoctors().stream()
                 .map(doctor -> doctor.getSpecialization())
                 .collect(Collectors.toSet());
+    }
+
+    private LoginI18n createI18n() {
+        final LoginI18n i18n = LoginI18n.createDefault();
+
+        i18n.setHeader(new LoginI18n.Header());
+        i18n.getForm().setUsername("Admin");
+        i18n.getForm().setPassword("admin");
+        return i18n;
+    }
+
+    private boolean authenticate(AbstractLogin.LoginEvent event) {
+        if(event.getUsername().equals("Admin") && event.getPassword().equals("admin")) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }
