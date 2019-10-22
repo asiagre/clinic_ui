@@ -15,6 +15,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLayout;
+import com.vaadin.server.Page;
 
 import java.util.List;
 import java.util.Set;
@@ -65,6 +66,7 @@ public class AdminView extends VerticalLayout implements RouterLayout {
             slotForm.setVisible(false);
             doctorGrid.asSingleSelect().clear();
             doctorForm.setDoctor(new Doctor());
+            Page.getCurrent().reload();
         });
         addSlot.addClickListener(event -> {
             doctorForm.setVisible(false);

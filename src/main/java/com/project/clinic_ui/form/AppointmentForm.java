@@ -23,68 +23,6 @@ import java.util.stream.Collectors;
 
 public class AppointmentForm extends FormLayout {
 
-//    private ClinicClient clinicClient;
-//    private MainView mainView;
-//
-//    private ComboBox<Doctor> doctor = new ComboBox<>();
-//    private ComboBox<LocalDateTime> slot = new ComboBox<>();
-//    private TextField firstname = new TextField("First Name");
-//    private TextField lastname = new TextField("Last Name");
-//    private TextField pin = new TextField("Personal Identifier Number");
-//    private TextField phoneNumber = new TextField("Phone Number");
-//    private TextField email = new TextField("Email");
-//    private PasswordField password = new PasswordField("Password");
-//    private Button makeAppointmentButton = new Button("Make an Appointment");
-//    private Button cancelButton = new Button("Cancel");
-//    private Binder<Appointment> binder = new Binder<>(Appointment.class);
-//
-//    public AppointmentForm(MainView mainView, ClinicClient clinicClient) {
-//        this.mainView = mainView;
-//        this.clinicClient = clinicClient;
-//        binder.bindInstanceFields(this);
-//        HorizontalLayout buttons = new HorizontalLayout(makeAppointmentButton, cancelButton);
-//        makeAppointmentButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-//        makeAppointmentButton.addClickListener(event -> makeAppointment());
-//        cancelButton.addClickListener(event -> cancel());
-//        add(doctor, slot, firstname, lastname, pin, phoneNumber, email, password, buttons);
-//    }
-//
-//    private void cancel() {
-//        setAppointment(null, null);
-//    }
-//
-//    private void makeAppointment() {
-//        Appointment appointment = binder.getBean();
-//        Patient patient = new Patient(firstname.getValue(),
-//                lastname.getValue(),
-//                pin.getValue(),
-//                phoneNumber.getValue(),
-//                email.getValue(),
-//                password.getValue());
-//        Patient patientInDb = clinicClient.createPatient(patient);
-//        AppointmentDto appointmentDto = new AppointmentDto(
-//                appointment.getSlot(),
-//                patientInDb.getId(),
-//                appointment.getDoctor().getId()
-//        );
-//        clinicClient.makeAppointment(appointmentDto);
-//        setAppointment(null, null);
-//        mainView.refresh();
-//    }
-//
-//    public void setAppointment(Appointment appointment, Doctor doc) {
-//        binder.setBean(appointment);
-//        if(appointment == null) {
-//            setVisible(false);
-//        } else {
-//            if(doc != null) {
-//                doctor.setValue(doc);
-//                slot.setItems(doc.getFreeSlots());
-//            }
-//            setVisible(true);
-//        }
-//    }
-
     private ClinicClient clinicClient;
     private MainView mainView;
     private Patient patient;

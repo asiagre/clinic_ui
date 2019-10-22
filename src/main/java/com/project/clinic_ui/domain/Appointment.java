@@ -1,7 +1,5 @@
 package com.project.clinic_ui.domain;
 
-import com.project.clinic_ui.domain.Doctor;
-import com.project.clinic_ui.domain.Patient;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

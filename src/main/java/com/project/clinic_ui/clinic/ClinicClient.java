@@ -1,6 +1,9 @@
 package com.project.clinic_ui.clinic;
 
-import com.project.clinic_ui.domain.*;
+import com.project.clinic_ui.domain.Doctor;
+import com.project.clinic_ui.domain.Patient;
+import com.project.clinic_ui.domain.Score;
+import com.project.clinic_ui.domain.Slot;
 import com.project.clinic_ui.dto.AppointmentDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,7 +16,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ClinicClient {
 
@@ -108,37 +110,6 @@ public class ClinicClient {
                 .queryParam("score", score.getScore())
                 .build().encode().toUri();
         restTemplate.put(url, null);
-    }
-
-    public List<Appointment> getPatientAppointments(Patient patient) {
-        URI url = UriComponentsBuilder.fromHttpUrl(clinicApiEndpoint + "/patients/" + patient.getId() + "/appointments")
-                .build().encode().toUri();
-        AppointmentDto[] response = restTemplate.getForObject(url, AppointmentDto[].class);
-        List<AppointmentDto> appointmentDtos = Arrays.asList(response);
-        List<Appointment> appointments = appointmentDtos.stream()
-                .map(appointmentDto -> new Appointment(appointmentDto.getId(), getDoctorById(appointmentDto.getDoctorId()), patient, appointmentDto.getVisitDate()))
-                .collect(Collectors.toList());
-        return appointments;
-    }
-
-    private Doctor getDoctorById(Long id) {
-        URI url = UriComponentsBuilder.fromHttpUrl(clinicApiEndpoint + "/doctors/" + id)
-                .build().encode().toUri();
-        Doctor response = restTemplate.getForObject(url, Doctor.class);
-        return response;
-    }
-
-    public void editAppointment(Appointment appointment, LocalDateTime slot) {
-        URI url = UriComponentsBuilder.fromHttpUrl(clinicApiEndpoint + "/doctors/" + appointment.getDoctor().getId() + "/appointments/" + appointment.getId())
-                .queryParam("newTime", appointment.getSlot())
-                .build().encode().toUri();
-        restTemplate.put(url, null);
-    }
-
-    public void deleteAppointment(Appointment appointment) {
-        URI url = UriComponentsBuilder.fromHttpUrl(clinicApiEndpoint + "/patients/" + appointment.getPatient().getId() + "/appointments/" + appointment.getId())
-                .build().encode().toUri();
-        restTemplate.delete(url);
     }
 
     public List<Patient> getPatients() {

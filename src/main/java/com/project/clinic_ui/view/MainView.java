@@ -1,6 +1,5 @@
 package com.project.clinic_ui.view;
 
-import com.project.clinic_ui.PatientView;
 import com.project.clinic_ui.clinic.ClinicClient;
 import com.project.clinic_ui.domain.Appointment;
 import com.project.clinic_ui.domain.Doctor;
@@ -21,8 +20,8 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLayout;
+import com.vaadin.server.Page;
 
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -32,7 +31,6 @@ public class MainView extends VerticalLayout implements RouterLayout {
     private ClinicClient clinicClient;
     private AppointmentForm appointmentForm;
     private AdminView adminView;
-    private PatientView patientView;
     private ScoreForm scoreForm;
     private Patient patient;
 
@@ -43,7 +41,6 @@ public class MainView extends VerticalLayout implements RouterLayout {
     private Grid<Doctor> doctorGrid = new Grid<>(Doctor.class);
     private Button adminButton = new Button("Admin panel");
     private Button addScore = new Button("Add score");
-    private Button myVisits = new Button("My visits");
     private LoginForm loginAdmin = new LoginForm();
     private LoginForm loginPatient = new LoginForm();
 
@@ -51,7 +48,6 @@ public class MainView extends VerticalLayout implements RouterLayout {
         this.clinicClient = clinicClient;
         appointmentForm = new AppointmentForm(this, clinicClient);
         adminView = new AdminView(clinicClient);
-        patientView = new PatientView(clinicClient);
         scoreForm = new ScoreForm(this, clinicClient);
         specialization.setItems(specializations());
         specialization.addValueChangeListener(event ->
@@ -60,7 +56,7 @@ public class MainView extends VerticalLayout implements RouterLayout {
         filter.setClearButtonVisible(true);
         filter.setValueChangeMode(ValueChangeMode.EAGER);
         filter.addValueChangeListener(e -> update());
-        HorizontalLayout horizontalLayout = new HorizontalLayout(specialization, filter, search, addScore, myVisits);
+        HorizontalLayout horizontalLayout = new HorizontalLayout(specialization, filter, search, addScore);
         doctorGrid.setColumns("firstname", "lastname", "rating", "specialization");
         HorizontalLayout mainContent = new HorizontalLayout(doctorGrid, appointmentForm, scoreForm, loginAdmin, loginPatient);
         mainContent.setSizeFull();
@@ -74,22 +70,6 @@ public class MainView extends VerticalLayout implements RouterLayout {
         setSizeFull();
         refresh();
         search.addClickListener(event -> doctorGrid.setItems(adminView.searching()));
-        myVisits.addClickListener(event -> {
-            refreshForms();
-            loginPatient.setVisible(true);
-            LoginI18n i18n = createI18n();
-            i18n.getForm().setUsername("Email");
-            loginPatient.setI18n(i18n);
-            loginPatient.addLoginListener(e -> {
-                boolean isAuthenticated = authenticatePatient(e);
-                if (isAuthenticated) {
-                    myVisits.getUI().ifPresent(ui -> ui.navigate("patient"));
-                    patientView.refresh();
-                } else {
-                    loginPatient.setError(true);
-                }
-            });
-        });
         adminButton.addClickListener(event -> {
             refreshForms();
             loginAdmin.setVisible(true);
@@ -139,24 +119,6 @@ public class MainView extends VerticalLayout implements RouterLayout {
     private boolean authenticateAdmin(AbstractLogin.LoginEvent event) {
         if(event.getUsername().equals("Admin") && event.getPassword().equals("admin")) {
             return true;
-        } else {
-            return false;
-        }
-    }
-
-    private boolean authenticatePatient(AbstractLogin.LoginEvent event) {
-        List<Patient> patientList = clinicClient.getPatients();
-        List<Patient> filterPatients = patientList.stream()
-                .filter(patient -> patient.getEmail().equals(event.getUsername()))
-                .collect(Collectors.toList());
-        if(filterPatients.size() == 1) {
-            if(filterPatients.get(0).getPassword().equals(event.getPassword())) {
-                patient = filterPatients.get(0);
-                patientView.setPatient(patient);
-                return true;
-            } else {
-                return false;
-            }
         } else {
             return false;
         }
