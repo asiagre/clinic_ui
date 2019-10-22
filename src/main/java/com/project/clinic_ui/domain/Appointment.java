@@ -1,6 +1,7 @@
-package com.project.clinic_ui;
+package com.project.clinic_ui.domain;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.project.clinic_ui.domain.Doctor;
+import com.project.clinic_ui.domain.Patient;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,11 +17,6 @@ public class Appointment {
 
     private Long id;
     private Doctor doctor;
-    private LocalDateTime slot;
-//    private String firstname;
-//    private String lastname;
-//    private String pin;
-//    private String phoneNumber;
-//    private String email;
     private Patient patient;
+    private LocalDateTime slot;
 }

@@ -1,16 +1,14 @@
-package com.project.clinic_ui;
+package com.project.clinic_ui.form;
 
+import com.project.clinic_ui.clinic.ClinicClient;
+import com.project.clinic_ui.domain.Doctor;
+import com.project.clinic_ui.view.AdminView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class DoctorForm extends FormLayout {
 

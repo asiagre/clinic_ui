@@ -24,17 +24,12 @@ ext {
 
 dependencies {
     compile("com.vaadin:vaadin-spring-boot-starter")
-//    compile("org.springframework.boot:spring-boot-starter-data-jpa")
     compile('org.springframework.boot:spring-boot-starter-web')
     compileOnly 'org.projectlombok:lombok:1.18.10'
     annotationProcessor 'org.projectlombok:lombok:1.18.10'
     compile group: 'com.vaadin', name: 'vaadin-server', version: '8.9.0'
     compile('com.vaadin:vaadin-bom:14.0.5')
     compile('com.fasterxml.jackson.datatype:jackson-datatype-jsr310')
-//    compile('org.vaadin.stefan:fullcalendar:1.9.2')
-//    compile('vaadin-addons:https://maven.vaadin.com/vaadin-addons')
-//    compile('org.vaadin.stefan:fullcalendar-scheduler:1.3.2')
-//    compile('org.vaadin.stefan:fullcalendar-scheduler:1.3.2')
     testCompile("junit:junit")
     testCompile("org.springframework.boot:spring-boot-starter-test")
 }

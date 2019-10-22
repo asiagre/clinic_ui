@@ -1,5 +1,9 @@
-package com.project.clinic_ui;
+package com.project.clinic_ui.form;
 
+import com.project.clinic_ui.clinic.ClinicClient;
+import com.project.clinic_ui.domain.Doctor;
+import com.project.clinic_ui.domain.Slot;
+import com.project.clinic_ui.view.AdminView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -47,7 +51,7 @@ public class SlotForm extends FormLayout {
             } else if(monthValue == 4 || monthValue == 6 || monthValue == 9 || monthValue == 11) {
                 day.setItems(getDays(MEDIUM_MONTH));
             } else {
-                day.setItems(LONG_MONTH);
+                day.setItems(getDays(LONG_MONTH));
             }
         });
         hour.setItems(getHours());

@@ -1,8 +1,8 @@
 # CLINIC_UI
 
-This is a frontend of clinic, written in Java with Vaadin. In this application
-you can make an appointment (after clicking on doctor on list) or go to admin panel,
-where you can add/edit/delete Doctor and add them free slots to use it when making appointments.
+This is a frontend of the clinic, written in Java with Vaadin. In this application
+you can schedule an appointment (selecting doctor from the list) or go to admin panel,
+where you can add/edit/delete Doctors and add free slots for them to use it when making appointments.
 
 ## Installation
 

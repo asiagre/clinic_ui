@@ -1,5 +1,9 @@
-package com.project.clinic_ui;
+package com.project.clinic_ui.form;
 
+import com.project.clinic_ui.clinic.ClinicClient;
+import com.project.clinic_ui.domain.Doctor;
+import com.project.clinic_ui.domain.Score;
+import com.project.clinic_ui.view.MainView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;

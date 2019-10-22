@@ -1,12 +1,13 @@
-package com.project.clinic_ui;
+package com.project.clinic_ui.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.vaadin.flow.data.binder.PropertyId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -14,30 +15,26 @@ public class Patient {
 
     private Long id;
 
-    @PropertyId("firstname")
     private String firstname;
 
-    @PropertyId("lastname")
     private String lastname;
 
-    @PropertyId("pin")
     private String pin;
 
-    @PropertyId("phoneNumber")
     private String phoneNumber;
 
-    @PropertyId("email")
     private String email;
 
-//    private String password;
-//    private boolean admin;
+    private String password;
 
-
-    public Patient(String firstname, String lastname, String pin, String phoneNumber, String email) {
+    public Patient(String firstname, String lastname, String pin, String phoneNumber, String email, String password) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.pin = pin;
         this.phoneNumber = phoneNumber;
         this.email = email;
+        this.password = password;
     }
+
+
 }

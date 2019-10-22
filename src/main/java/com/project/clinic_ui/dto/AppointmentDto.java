@@ -1,4 +1,4 @@
-package com.project.clinic_ui;
+package com.project.clinic_ui.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
